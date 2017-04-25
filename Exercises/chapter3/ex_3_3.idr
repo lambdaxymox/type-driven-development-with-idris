@@ -29,3 +29,24 @@ addMatrix' mat1 mat2 = zipWith (zipWith (+)) mat1 mat2
 (+) = addMatrix
 
 -- Exercise 3
+multVecs : Num a => (xs : Vect n a) -> (ys : Vect n a) -> a
+multVecs xs ys = sum (zipWith (*) xs ys)
+
+makeRow : Num a => (x : Vect n a)
+                -> (ysTrans : Vect p (Vect n a))
+                -> Vect p a
+makeRow x [] = []
+makeRow x (y :: xs) = multVecs x y :: makeRow x xs
+
+multMatrixHelper : Num a => (xs : Vect m (Vect n a))
+                         -> (ysTrans : Vect p (Vect n a))
+                         -> Vect m (Vect p a)
+multMatrixHelper [] ysTrans = []
+multMatrixHelper (x :: xs) ysTrans
+     = makeRow x ysTrans :: multMatrixHelper xs ysTrans
+
+multMatrix : Num a => Vect m (Vect n a)
+                   -> Vect n (Vect p a)
+                   -> Vect m (Vect p a)
+multMatrix xs ys = let ysTrans = transposeMat ys
+                   in  multMatrixHelper xs ysTrans
