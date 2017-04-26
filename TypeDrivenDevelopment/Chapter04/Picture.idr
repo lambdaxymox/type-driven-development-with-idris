@@ -47,5 +47,15 @@ pictureArea (Combine pic1 pic2) = pictureArea pic1 + pictureArea pic2
 pictureArea (Rotate x pic) = pictureArea pic
 pictureArea (Translate x y pic) = pictureArea pic
 
+maybeMax : Ord a => Maybe a -> Maybe a -> Maybe a
+maybeMax Nothing Nothing = Nothing
+maybeMax Nothing (Just x) = Just x
+maybeMax (Just x) Nothing = Just x
+maybeMax (Just x) (Just y) = Just $ max x y
+
 biggestTriangle : Picture -> Maybe Double
-biggestTriangle pic = ?biggestTriangle_rhs
+biggestTriangle (Primitive tri@(Triangle x y)) = Just $ area tri
+biggestTriangle (Primitive _) = Nothing
+biggestTriangle (Combine pic1 pic2) = maybeMax (biggestTriangle pic1) (biggestTriangle pic2)
+biggestTriangle (Rotate x pic) = biggestTriangle pic
+biggestTriangle (Translate x y pic) = biggestTriangle pic
