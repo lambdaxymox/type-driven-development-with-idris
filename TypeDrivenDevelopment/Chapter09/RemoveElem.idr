@@ -1,10 +1,5 @@
 import Data.Vect
 
-removeElem : DecEq a => (value : a) -> (xs : Vect (S n) a) -> Vect n a
-removeElem value (x :: xs) = case decEq value x of
-                                  Yes prf => xs
-                                  No contra => x :: removeElem value xs
-{-
 removeElem_v1 : DecEq a => (value : a) -> (xs : Vect (S n) a) -> Vect n a
 removeElem_v1 value (x :: xs) = case decEq value x of
                                      Yes prf => xs
@@ -13,7 +8,7 @@ removeElem_v1 value (x :: xs) = case decEq value x of
 Uninhabited (2 + 2 = 5) where
     uninhabited Refl impossible
 
-
+{-}
 removeElem : (value : a) -> (xs : Vect (S n) a) ->
              Elem value xs ->
              Vect n a
@@ -25,7 +20,7 @@ removeElem {n = (S k)} value (y :: ys) (There later)
 removeElem_auto : (value : a) -> (xs : Vect (S n) a) ->
                   {auto prf : Elem value xs} -> Vect n a
 removeElem_auto value xs {prf} = removeElem value xs prf
-
+-}
 
 removeElem : (value : a) -> (xs : Vect (S n) a) ->
              {auto prf : Elem value xs} ->
@@ -57,4 +52,3 @@ my_decElem value (x :: xs)
             (No contra) => case my_decElem value xs of
                                 (Yes prf) => Yes (There prf)
                                 (No contra1) => No (not_in_tail contra1 contra)
--}
